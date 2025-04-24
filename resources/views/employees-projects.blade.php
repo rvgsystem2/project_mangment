@@ -10,21 +10,23 @@
             <th>Employee Name</th>
             <th>Email</th>
             <th>Assigned Projects</th>
+            <th>Delete</th>
         </tr>
     </thead>
     <tbody>
-        @foreach($employees as $index => $employee)
+        @foreach($employees as  $employee)
             <tr>
-                <td>{{ $index + 1 }}</td>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{ $employee->name }}</td>
                 <td>{{ $employee->email }}</td>
                 <td>
                     @forelse($employee->projects as $project)
-                        <span class="badge bg-primary">{{ $project->name }}</span>
+                        <span class="bg-warning">{{ $project->name }}</span>
                     @empty
                         <span class="text-muted">No Projects Assigned</span>
                     @endforelse
                 </td>
+                <td><a href="{{route('employees.delete',['id'=>$employee->id])}}" onclick="return confirm('Are you sure delete this item...!')" class="btn btn-danger btn-sm">Delete</a></td>
             </tr>
         @endforeach
     </tbody>

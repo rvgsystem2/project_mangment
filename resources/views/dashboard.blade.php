@@ -23,20 +23,17 @@
 
         @php
              $totalEmployees = App\Models\Employee::count();
-        $totalProjects = App\Models\Project::count();
+             $totalProjects = App\Models\Project::count();
+             $assignedProjects = DB::table('employee_project')->count();
 
-        // Total project assignments (each assignment is one row in pivot)
-        $assignedProjects = DB::table('employee_project')->count();
-
-        // List of employees with assigned projects
         $employees = App\Models\Employee::with('projects')->get();
         @endphp
         <div class="row">
             <div class="col-md-4">
                 <div class="card text-white bg-primary mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Total Employees</h5>
-                        <p class="card-text">{{ $totalEmployees }}</p>
+                        <h5>Total Employees</h5>
+                        <p>{{ $totalEmployees }}</p>
                         <p><a href="{{route('employees.all')}}" class="btn btn-info">View</a></p>
 
                     </div>
@@ -46,8 +43,8 @@
             <div class="col-md-4">
                 <div class="card text-white bg-success mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Projects</h5>
-                        <p class="card-text">{{ $totalProjects }}</p>
+                        <h5>Projects</h5>
+                        <p>{{ $totalProjects }}</p>
                         <p><a href="{{route('projects.all')}}" class="btn btn-info">View</a></p>
 
                     </div>
@@ -57,8 +54,8 @@
             <div class="col-md-4">
                 <div class="card text-white bg-warning mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Assigned Projects</h5>
-                        <p class="card-text">{{ $assignedProjects }}</p>
+                        <h5>Assigned Projects</h5>
+                        <p>{{ $assignedProjects }}</p>
                         <p><a href="{{route('employees.projects')}}" class="btn btn-info">View</a></p>
                     </div>
                 </div>

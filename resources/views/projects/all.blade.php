@@ -10,14 +10,16 @@
             <th>#</th>
             <th>Project Name</th>
             <th>Description</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
-        @foreach($projects as $index => $project)
+        @foreach($projects as  $project)
             <tr>
-                <td>{{ $index + 1 }}</td>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{ $project->name }}</td>
-                <td>{{ $project->description ?? 'N/A' }}</td>
+                <td>{{ $project->description ?? 'no description'}}</td>
+                <td><a href="{{route('projects.delete',['id'=>$project->id])}}" onclick="return confirm('Are you sure delete this item...!')" class="btn btn-danger btn-sm">Delete</a></td>
             </tr>
         @endforeach
     </tbody>

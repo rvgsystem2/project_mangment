@@ -40,11 +40,22 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
+
+    //    $user =  User::where('email', $request->email)->first();
+
+    //     if($user && hash::check($request->email ,$request->password)){
+    //         Auth::login($user);
+    //         return redirect()->route('dashboard');
+       
+    //     }else{
+    //         return redirect()->back()->with('error','Does not match email and password...!');
+    //     }
+
         if (Auth::attempt($request->only('email', 'password'))) {
             return redirect()->route('dashboard');
         }
 
-        return back()->withErrors(['email' => 'Invalid credentials']);
+        return back()->withErrors(['email' => 'Invalid email and password']);
     }
 
     public function logout(Request $request) {

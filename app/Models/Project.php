@@ -8,9 +8,8 @@ class Project extends Model
 {
     protected $guarded=['id'];
     
-    public function employees()
-{
+    public function employees(){
     return $this->belongsToMany(Employee::class);
-}
+    }
 
 }

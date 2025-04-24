@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\Project;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class EmployeeProjectController extends Controller
@@ -15,19 +16,20 @@ class EmployeeProjectController extends Controller
         return view('assign', compact('employees', 'projects'));
     }
 
-    public function storeEmployee(Request $request)
-    {
+    public function storeEmployee(Request $request){
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:employees'
         ]);
 
-        Employee::create($request->only('name', 'email'));
+        Employee::create([
+            'name' =>$request->name,
+            'email' =>$request->email,
+        ]);
         return back()->with('success', 'Employee added successfully.');
     }
 
-    public function storeProject(Request $request)
-    {
+    public function storeProject(Request $request) {
         $request->validate([
             'name' => 'required|unique:projects'
         ]);
@@ -45,8 +47,20 @@ class EmployeeProjectController extends Controller
             'project_ids.*' => 'exists:projects,id',
         ]);
 
-        $employee = Employee::find($request->employee_id);
-        $employee->projects()->sync($request->project_ids);
+        $projectIds = $request->project_ids;
+        foreach($projectIds as $projectId){
+            $exists = DB::table('employee_project')
+                ->where('employee_id', $request->employee_id)
+                ->where('project_id', $projectId)
+                ->exists();
+        
+            if (!$exists) {
+                DB::table('employee_project')->insert([
+                    'employee_id' => $request->employee_id,
+                    'project_id' => $projectId,
+                ]);
+            }
+        }
 
         return back()->with('success', 'Projects assigned to employee.');
     }
